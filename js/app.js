@@ -12,7 +12,7 @@ const cards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cub
  */
 
 shuffle(cards);
-
+/*
 const deck = document.querySelector(".deck");
 
 for (let i = 1; i<cards.length; i++){
@@ -20,7 +20,7 @@ for (let i = 1; i<cards.length; i++){
   newCard.ClassName = array[i];
   deck.appendChild(newCard);
 }
-
+ */
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -36,6 +36,27 @@ function shuffle(array) {
     return array;
 }
 
+/*
+ * Getting all the cards and creating an array for opened cards
+ */
+const card = document.getElementsByClassName('card');
+const openCards =[];
+
+console.log(card.length);
+
+/*
+ * Adding event listeners to all cards and showing and adding them to the openCards array
+ */
+const deck = document.querySelector(".deck");
+
+for (let i = 0; i < deck.children.length; i++) {
+    let childElement = deck.children[i];
+    childElement.addEventListener('click', function () {
+        console.log(i);
+        card[i].classList.add("show");
+        openCards.push(card[i]);
+        });
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
