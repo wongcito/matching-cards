@@ -1,10 +1,20 @@
 /*
+/To Do List:
+- shuffle cards
+- final message
+- add starts
+- cool effects
+*/
+
+
+/*
  * Create a list that holds all of your cards
  */
 
 const cards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb", "fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb"];
 let moves = 0;
 let pairsMatched = 0;
+const deck = document.querySelector(".deck");
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -35,39 +45,40 @@ function shuffle(array) {
 const card = document.getElementsByClassName('card');
 let openCards =[];
 
-console.log(card.length);
-
 /*
  * Adding event listeners to all cards and showing and adding them to the openCards array
  */
-const deck = document.querySelector(".deck");
+
 
 for (let i = 0; i < deck.children.length; i++) {
     let childElement = deck.children[i];
     childElement.addEventListener('click', function () {
-        console.log(i);
         openCard(i);
         pushToOpenCards(i);
-        console.log(openCards[0].classList);
-        console.log(openCards.length);
         if (openCards.length == 2){
           if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
-            console.log("match");
-            console.log(openCards[0].children[0].classList);
-            console.log(openCards[1].children[0].classList);
             matchCards();
           } else {
-            console.log ("don't match");
-            console.log(openCards[0].children[0].classList.value);
-            console.log(openCards[1].children[0].classList.value);
             closeCards();
                   }
-        } else {
-          console.log("just one card");
         }
-
-        //openCards.push(card[i]);
         });
+}
+
+const retryButton = document.getElementsByClassName("restart");
+retryButton[0].addEventListener('click', restart);
+
+function restart () {
+
+  openCards = [];
+  pairsMatched = 0;
+  for (let i = 0; i < deck.children.length; i++) {
+      let childElement = deck.children[i];
+      childElement.classList.remove("show", "open", "match");
+      childElement.classList.add("card");
+    }
+    moves = 0;
+    document.getElementsByClassName("moves")[0].innerHTML= moves;
 }
 
 function openCard (el) {
@@ -91,7 +102,6 @@ function matchCards (){
   openCards = [];
   increaseCounter();
   pairsMatched++;
-  debugger;
   if (pairsMatched==8){
     showFinalScore();
   }
@@ -99,12 +109,11 @@ function matchCards (){
 
 function increaseCounter(){
   moves++;
-  console.log(document.getElementsByClassName("moves")[0].innerHTML);
   document.getElementsByClassName("moves")[0].innerHTML= moves;
 }
 
 function showFinalScore(){
-  console.log("End");
+  document.getElementsByClassName("deck").style.display = "none";
 }
 
 /*
