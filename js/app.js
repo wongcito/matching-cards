@@ -3,7 +3,8 @@
  */
 
 const cards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb", "fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb"];
-
+let moves = 0;
+let pairsMatched = 0;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -12,15 +13,7 @@ const cards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cub
  */
 
 shuffle(cards);
-/*
-const deck = document.querySelector(".deck");
 
-for (let i = 1; i<cards.length; i++){
-  newCard = document.createElement(i);
-  newCard.ClassName = array[i];
-  deck.appendChild(newCard);
-}
- */
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -40,7 +33,7 @@ function shuffle(array) {
  * Getting all the cards and creating an array for opened cards
  */
 const card = document.getElementsByClassName('card');
-const openCards =[];
+let openCards =[];
 
 console.log(card.length);
 
@@ -53,9 +46,65 @@ for (let i = 0; i < deck.children.length; i++) {
     let childElement = deck.children[i];
     childElement.addEventListener('click', function () {
         console.log(i);
-        card[i].classList.add("show");
-        openCards.push(card[i]);
+        openCard(i);
+        pushToOpenCards(i);
+        console.log(openCards[0].classList);
+        console.log(openCards.length);
+        if (openCards.length == 2){
+          if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
+            console.log("match");
+            console.log(openCards[0].children[0].classList);
+            console.log(openCards[1].children[0].classList);
+            matchCards();
+          } else {
+            console.log ("don't match");
+            console.log(openCards[0].children[0].classList.value);
+            console.log(openCards[1].children[0].classList.value);
+            closeCards();
+                  }
+        } else {
+          console.log("just one card");
+        }
+
+        //openCards.push(card[i]);
         });
+}
+
+function openCard (el) {
+  deck.children[el].classList.add("show", "open");
+}
+
+function pushToOpenCards (el){
+  openCards.push(deck.children[el]);
+}
+
+function closeCards (){
+  openCards[0].classList.remove("show", "open");
+  openCards[1].classList.remove("show", "open");
+  openCards = [];
+  increaseCounter();
+}
+
+function matchCards (){
+  openCards[0].classList.replace("show","match");
+  openCards[1].classList.replace("show","match");
+  openCards = [];
+  increaseCounter();
+  pairsMatched++;
+  debugger;
+  if (pairsMatched==8){
+    showFinalScore();
+  }
+}
+
+function increaseCounter(){
+  moves++;
+  console.log(document.getElementsByClassName("moves")[0].innerHTML);
+  document.getElementsByClassName("moves")[0].innerHTML= moves;
+}
+
+function showFinalScore(){
+  console.log("End");
 }
 
 /*
