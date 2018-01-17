@@ -1,13 +1,4 @@
 /*
-/To Do List:
-- shuffle cards
-- final message
-- add starts
-- cool effects
-*/
-
-
-/*
  * Create a list that holds all of your cards
  */
 
@@ -15,6 +6,9 @@ const cards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cub
 let moves = 0;
 let pairsMatched = 0;
 const deck = document.querySelector(".deck");
+const stars = document.querySelector(".stars");
+let p = document.createElement("p");
+let button = document.createElement("button");
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -22,8 +16,17 @@ const deck = document.querySelector(".deck");
  *   - add each card's HTML to the page
  */
 
-shuffle(cards);
+let deckCards = Array.from(deck.children);
 
+deckCards = shuffle(deckCards);
+
+while (deck.firstChild) {
+    deck.removeChild(deck.firstChild);
+}
+
+for (i=0;i<deckCards.length;i++){
+  deck.appendChild(deckCards[i]);
+}
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -55,38 +58,63 @@ for (let i = 0; i < deck.children.length; i++) {
     childElement.addEventListener('click', function () {
         openCard(i);
         pushToOpenCards(i);
+
         if (openCards.length == 2){
           if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
             matchCards();
+            starsCheck();
           } else {
-            closeCards();
-                  }
+            setTimeout(function(){
+              closeCards();
+              starsCheck();
+            }, 700);
+          }
         }
         });
+
 }
 
 const retryButton = document.getElementsByClassName("restart");
 retryButton[0].addEventListener('click', restart);
 
 function restart () {
+  moves = 0;
+  if(deck.children[16]){
+    deck.removeChild(p);
+    deck.removeChild(button);
+  }
 
+  stars.children[1].style.visibility = "visible";
+  stars.children[2].style.visibility = "visible";
   openCards = [];
   pairsMatched = 0;
+  for (i=0;i<deck.children.length;i++){
+      deck.children[i].style.visibility = "visible";
+  }
   for (let i = 0; i < deck.children.length; i++) {
       let childElement = deck.children[i];
       childElement.classList.remove("show", "open", "match");
       childElement.classList.add("card");
     }
-    moves = 0;
+
     document.getElementsByClassName("moves")[0].innerHTML= moves;
 }
 
+function starsCheck (){
+  if (moves >= 20){
+    stars.children[1].style.visibility = "hidden";
+  } else if (moves>=10){
+    stars.children[2].style.visibility = "hidden";
+  }
+}
+
 function openCard (el) {
-  deck.children[el].classList.add("show", "open");
+  deck.children[el].classList.add("open", "show");
 }
 
 function pushToOpenCards (el){
   openCards.push(deck.children[el]);
+
 }
 
 function closeCards (){
@@ -112,8 +140,17 @@ function increaseCounter(){
   document.getElementsByClassName("moves")[0].innerHTML= moves;
 }
 
+
+
 function showFinalScore(){
-  document.getElementsByClassName("deck").style.display = "none";
+  for (i=0;i<deck.children.length;i++){
+      deck.children[i].style.visibility = "hidden";
+  }
+  p.textContent = "Congratulations! You spent " + moves + " moves."
+  button.innerHTML = "Play again?";
+  deck.appendChild(p);
+  deck.appendChild(button);
+  button.addEventListener('click', restart);
 }
 
 /*
