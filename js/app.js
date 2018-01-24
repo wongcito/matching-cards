@@ -7,21 +7,16 @@ let moves = 0;
 let pairsMatched = 0;
 const deck = document.querySelector(".deck");
 const stars = document.querySelector(".stars");
-let p = document.createElement("p");
+let p = document.querySelector(".modal-content");
 let button = document.createElement("button");
+const modal = document.getElementById('myModal');
+const span = document.getElementsByClassName("close")[0];
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-
-
- // Set the date we're counting down to
- //let startTime = new Date();
- //let startSeconds = startTime.getSeconds();
-//console.log(startSeconds);
- // Update the count down every 1 second
 
 let distance = 0;
 
@@ -74,7 +69,7 @@ let openCards =[];
 for (let i = 0; i < deck.children.length; i++) {
     let childElement = deck.children[i];
     childElement.addEventListener('click', function () {
-        if (!(childElement.classList.contains("show"))){
+        if (!(childElement.classList.contains("show")) && (openCards.length<2)){
           openCard(i);
           pushToOpenCards(i);
             if (openCards.length == 2){
@@ -102,8 +97,13 @@ function restart () {
   moves = 0;
   distance = 0;
   document.getElementsByClassName("timer")[0].innerHTML = "Timer";
-  setTimeout(function(){
-  }, 1000);
+  timer = setInterval(function() {
+
+     distance = distance + 1;
+
+     document.getElementsByClassName("timer")[0].innerHTML = distance + " seconds";
+
+   }, 1000);
 
   if(deck.children[16]){
     deck.removeChild(p);
@@ -173,11 +173,21 @@ function showFinalScore(){
   for (i=0;i<deck.children.length;i++){
       deck.children[i].style.visibility = "hidden";
   }
+  openModal();
   p.textContent = "Congratulations! You spent " + moves + " moves " + "and " + distance + " seconds."
-  button.innerHTML = "Play again?";
-  deck.appendChild(p);
-  deck.appendChild(button);
-  button.addEventListener('click', restart);
+  document.getElementsByClassName("timer")[0].innerHTML = "Timer";
+  clearInterval(timer);
+}
+
+function openModal() {
+    modal.style.display = "block";
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        restart();
+    }
 }
 
 /*
