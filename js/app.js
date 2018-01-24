@@ -16,6 +16,24 @@ let button = document.createElement("button");
  *   - add each card's HTML to the page
  */
 
+
+ // Set the date we're counting down to
+ //let startTime = new Date();
+ //let startSeconds = startTime.getSeconds();
+//console.log(startSeconds);
+ // Update the count down every 1 second
+
+let distance = 0;
+
+let timer = setInterval(function() {
+
+   distance = distance + 1;
+
+   document.getElementsByClassName("timer")[0].innerHTML = distance + " seconds";
+
+ }, 1000);
+
+
 let deckCards = Array.from(deck.children);
 
 deckCards = shuffle(deckCards);
@@ -56,21 +74,24 @@ let openCards =[];
 for (let i = 0; i < deck.children.length; i++) {
     let childElement = deck.children[i];
     childElement.addEventListener('click', function () {
-        openCard(i);
-        pushToOpenCards(i);
-
-        if (openCards.length == 2){
-          if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
-            matchCards();
-            starsCheck();
-          } else {
-            setTimeout(function(){
-              closeCards();
+        if (!(childElement.classList.contains("show"))){
+          openCard(i);
+          pushToOpenCards(i);
+            if (openCards.length == 2){
+            if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
+              matchCards();
               starsCheck();
-            }, 700);
+            } else {
+              setTimeout(function(){
+                closeCards();
+                starsCheck();
+              }, 700);
+            }
           }
-        }
-        });
+          };
+
+        })
+
 
 }
 
@@ -79,9 +100,15 @@ retryButton[0].addEventListener('click', restart);
 
 function restart () {
   moves = 0;
+  distance = 0;
+  document.getElementsByClassName("timer")[0].innerHTML = "Timer";
+  setTimeout(function(){
+  }, 1000);
+
   if(deck.children[16]){
     deck.removeChild(p);
     deck.removeChild(button);
+
   }
 
   stars.children[1].style.visibility = "visible";
@@ -146,7 +173,7 @@ function showFinalScore(){
   for (i=0;i<deck.children.length;i++){
       deck.children[i].style.visibility = "hidden";
   }
-  p.textContent = "Congratulations! You spent " + moves + " moves."
+  p.textContent = "Congratulations! You spent " + moves + " moves " + "and " + distance + " seconds."
   button.innerHTML = "Play again?";
   deck.appendChild(p);
   deck.appendChild(button);
