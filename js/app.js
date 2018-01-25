@@ -95,17 +95,20 @@ for (let i = 0; i < deck.children.length; i++) {
 const retryButton = document.getElementsByClassName("restart");
 retryButton[0].addEventListener('click', restart);
 
+const retryButtonModal = document.getElementsByClassName("restart-modal");
+retryButtonModal[0].addEventListener('click', restartModal);
+
 function restart () {
   moves = 0;
   distance = 0;
   document.getElementsByClassName("timer")[0].innerHTML = "Timer";
-  timer = setInterval(function() {
+  /*timer = setInterval(function() {
 
      distance = distance + 1;
 
      document.getElementsByClassName("timer")[0].innerHTML = distance + " seconds";
 
-   }, 1000);
+   }, 1000);*/
 
   if(deck.children[16]){
     deck.removeChild(p);
@@ -137,7 +140,7 @@ function starsCheck (){
     starsend.children[1].style.visibility = "hidden";
   } else if (moves>=10){
     stars.children[2].style.visibility = "hidden";
-    starsend.children[1].style.visibility = "hidden";
+    starsend.children[2].style.visibility = "hidden";
   }
 }
 
@@ -189,12 +192,18 @@ function openModal() {
     modal.style.display = "block";
 }
 
+function restartModal(){
+  modal.style.display = "none";
+  restart();
+}
+
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
         restart();
     }
 }
+
 
 /*
  * set up the event listener for a card. If a card is clicked:
