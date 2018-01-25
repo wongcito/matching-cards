@@ -6,8 +6,10 @@ const cards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cub
 let moves = 0;
 let pairsMatched = 0;
 const deck = document.querySelector(".deck");
-const stars = document.querySelector(".stars");
-let p = document.querySelector(".modal-content");
+const stars = document.querySelectorAll(".stars")[0];
+const starsend = document.querySelectorAll(".stars")[1];
+console.log(stars);
+let p = document.querySelector(".modalp");
 let button = document.createElement("button");
 const modal = document.getElementById('myModal');
 const span = document.getElementsByClassName("close")[0];
@@ -113,6 +115,8 @@ function restart () {
 
   stars.children[1].style.visibility = "visible";
   stars.children[2].style.visibility = "visible";
+  starsend.children[1].style.visibility = "visible";
+  starsend.children[2].style.visibility = "visible";
   openCards = [];
   pairsMatched = 0;
   for (i=0;i<deck.children.length;i++){
@@ -130,8 +134,10 @@ function restart () {
 function starsCheck (){
   if (moves >= 20){
     stars.children[1].style.visibility = "hidden";
+    starsend.children[1].style.visibility = "hidden";
   } else if (moves>=10){
     stars.children[2].style.visibility = "hidden";
+    starsend.children[1].style.visibility = "hidden";
   }
 }
 
