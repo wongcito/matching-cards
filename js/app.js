@@ -13,6 +13,7 @@ let p = document.querySelector(".modalp");
 let button = document.createElement("button");
 const modal = document.getElementById('myModal');
 const span = document.getElementsByClassName("close")[0];
+let gameStarted = 0;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -20,16 +21,9 @@ const span = document.getElementsByClassName("close")[0];
  *   - add each card's HTML to the page
  */
 
+let timergame;
+
 let distance = 0;
-
-let timer = setInterval(function() {
-
-   distance = distance + 1;
-
-   document.getElementsByClassName("timer")[0].innerHTML = distance + " seconds";
-
- }, 1000);
-
 
 let deckCards = Array.from(deck.children);
 
@@ -67,29 +61,27 @@ let openCards =[];
  * Adding event listeners to all cards and showing and adding them to the openCards array
  */
 
-
 for (let i = 0; i < deck.children.length; i++) {
     let childElement = deck.children[i];
     childElement.addEventListener('click', function () {
-        if (!(childElement.classList.contains("show")) && (openCards.length<2)){
-          openCard(i);
-          pushToOpenCards(i);
-            if (openCards.length == 2){
-            if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
-              matchCards();
+      gameStarted++;
+      checkTimer();
+      if (!(childElement.classList.contains("show")) && (openCards.length<2)){
+        openCard(i);
+        pushToOpenCards(i);
+          if (openCards.length == 2){
+          if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
+            matchCards();
+            starsCheck();
+          } else {
+            setTimeout(function(){
+              closeCards();
               starsCheck();
-            } else {
-              setTimeout(function(){
-                closeCards();
-                starsCheck();
-              }, 700);
-            }
+            }, 700);
           }
-          };
-
-        })
-
-
+        }
+        };
+      })
 }
 
 const retryButton = document.getElementsByClassName("restart");
@@ -102,14 +94,8 @@ function restart () {
   moves = 0;
   distance = 0;
   document.getElementsByClassName("timer")[0].innerHTML = "Timer";
-  /*timer = setInterval(function() {
-
-     distance = distance + 1;
-
-     document.getElementsByClassName("timer")[0].innerHTML = distance + " seconds";
-
-   }, 1000);*/
-
+  gameStarted = 0;
+  checkTimer();
   if(deck.children[16]){
     deck.removeChild(p);
     deck.removeChild(button);
@@ -168,6 +154,8 @@ function matchCards (){
   pairsMatched++;
   if (pairsMatched==8){
     showFinalScore();
+    gameStarted = false;
+    checkTimer();
   }
 }
 
@@ -185,7 +173,6 @@ function showFinalScore(){
   openModal();
   p.textContent = "Congratulations! You spent " + moves + " moves " + "and " + distance + " seconds."
   document.getElementsByClassName("timer")[0].innerHTML = "Timer";
-  clearInterval(timer);
 }
 
 function openModal() {
@@ -195,6 +182,21 @@ function openModal() {
 function restartModal(){
   modal.style.display = "none";
   restart();
+}
+
+function timer() {
+  timergame = setInterval (function() {
+  distance = distance + 1;
+  document.getElementsByClassName("timer")[0].innerHTML = distance + " seconds";
+  }, 1000);
+}
+
+function checkTimer(){
+  if (gameStarted == 1) {
+      timer();
+  } else if (gameStarted == 0) {
+    clearInterval(timergame);
+  }
 }
 
 window.onclick = function(event) {
