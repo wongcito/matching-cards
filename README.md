@@ -3,6 +3,7 @@
 ## Table of Contents
 
 * [Instructions](#instructions)
+* [Setup](#setup)
 * [Contributing](#contributing)
 
 ## Instructions
@@ -10,6 +11,10 @@
 Are you ready for playing this memory game?
 
 Test your luck and try to match equal figures as soon as possible and using the least amount of moves. Try to get three stars!
+
+## Setup
+
+Just download the files and open the index.html file.
 
 ## Contributing
 
