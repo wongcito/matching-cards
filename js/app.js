@@ -24,18 +24,45 @@ let gameStarted = 0;
 let timergame;
 
 let distance = 0;
-
 let deckCards = Array.from(deck.children);
+setCards();
+function setCards () {
+  deckCards = shuffle(deckCards);
 
-deckCards = shuffle(deckCards);
+  while (deck.firstChild) {
+      deck.removeChild(deck.firstChild);
+  }
 
-while (deck.firstChild) {
-    deck.removeChild(deck.firstChild);
+  for (i=0;i<deckCards.length;i++){
+    deck.appendChild(deckCards[i]);
+  }
+
+  for (let i = 0; i < deck.children.length; i++) {
+      let childElement = deck.children[i];
+      childElement.addEventListener('click', function () {
+        gameStarted++;
+        checkTimer();
+        if (!(childElement.classList.contains("show")) && (openCards.length<2)){
+          openCard(i);
+          pushToOpenCards(i);
+            if (openCards.length == 2){
+            if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
+              matchCards();
+              starsCheck();
+            } else {
+              setTimeout(function(){
+                closeCards();
+                starsCheck();
+              }, 700);
+            }
+          }
+          };
+        })
+  }
+
 }
 
-for (i=0;i<deckCards.length;i++){
-  deck.appendChild(deckCards[i]);
-}
+
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -61,29 +88,6 @@ let openCards =[];
  * Adding event listeners to all cards and showing and adding them to the openCards array
  */
 
-for (let i = 0; i < deck.children.length; i++) {
-    let childElement = deck.children[i];
-    childElement.addEventListener('click', function () {
-      gameStarted++;
-      checkTimer();
-      if (!(childElement.classList.contains("show")) && (openCards.length<2)){
-        openCard(i);
-        pushToOpenCards(i);
-          if (openCards.length == 2){
-          if (openCards[0].children[0].classList.value == openCards[1].children[0].classList.value){
-            matchCards();
-            starsCheck();
-          } else {
-            setTimeout(function(){
-              closeCards();
-              starsCheck();
-            }, 700);
-          }
-        }
-        };
-      })
-}
-
 const retryButton = document.getElementsByClassName("restart");
 retryButton[0].addEventListener('click', restart);
 
@@ -99,8 +103,10 @@ function restart () {
   if(deck.children[16]){
     deck.removeChild(p);
     deck.removeChild(button);
-
+    setCards();
   }
+
+
 
   stars.children[1].style.visibility = "visible";
   stars.children[2].style.visibility = "visible";
